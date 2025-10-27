@@ -1,0 +1,30 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+df = pd.read_csv('spam.csv', encoding='latin-1')
+
+# Data Cleaning and Renaming
+df = df.iloc[:, [0, 1]]
+df.columns = ['Label', 'Message']
+
+# Feature Engineering: Message Length
+df['Length'] = df['Message'].apply(len)
+
+# Visualization
+sns.set_style("whitegrid")
+plt.figure(figsize=(12, 6))
+
+df_ham = df[df['Label'] == 'ham']
+df_spam = df[df['Label'] == 'spam']
+
+sns.histplot(df_ham['Length'], bins=50, alpha=0.6, label='Ham (Non-Spam)', color='green')
+sns.histplot(df_spam['Length'], bins=50, alpha=0.6, label='Spam', color='red')
+
+plt.title('Distribution of SMS Message Length: Ham vs. Spam', fontsize=16)
+plt.xlabel('Message Length (Characters)', fontsize=12)
+plt.ylabel('Frequency', fontsize=12)
+plt.legend()
+plt.tight_layout()
+plt.savefig('Message_Length_Distribution.png')
+plt.close()
